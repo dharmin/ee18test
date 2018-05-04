@@ -183,7 +183,7 @@ class EEStackController(CementBaseController):
             Log.debug(self, 'Adding ppa of Nginx')
             EERepo.add_key(self, EEVariables.ee_nginx_key)
 
-        if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'):
+        if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'or EEVariables.ee_platform_codename == 'bionic'):
             if set(EEVariables.ee_php7_0).issubset(set(apt_packages)) \
                     or set(EEVariables.ee_php5_6).issubset(set(apt_packages)):
                 Log.info(self, "Adding repository for PHP, please wait...")
@@ -372,7 +372,7 @@ class EEStackController(CementBaseController):
                     ee_nginx.close()
 
                     #php7 conf
-                    if (EEVariables.ee_platform_codename == 'jessie' or EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial') and (not
+                    if (EEVariables.ee_platform_codename == 'jessie' or EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'or EEVariables.ee_platform_codename == 'bionic') and (not
                         os.path.isfile("/etc/nginx/common/php7.conf")):
                         #data = dict()
                         Log.debug(self, 'Writting the nginx configuration to '
@@ -601,7 +601,7 @@ class EEStackController(CementBaseController):
                                         out=ee_nginx)
                         ee_nginx.close()
 
-                    if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'):
+                    if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'or EEVariables.ee_platform_codename == 'bionic'):
                         if os.path.isfile("/etc/nginx/nginx.conf") and (not
                             os.path.isfile("/etc/nginx/common/redis-php7.conf")):
                             data = dict()
@@ -998,7 +998,7 @@ class EEStackController(CementBaseController):
                 EEService.restart_service(self, 'php5-fpm')
 
 
-            if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial') and set(EEVariables.ee_php5_6).issubset(set(apt_packages)):
+            if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'or EEVariables.ee_platform_codename == 'bionic') and set(EEVariables.ee_php5_6).issubset(set(apt_packages)):
                 # Create log directories
                 if not os.path.exists('/var/log/php/5.6/'):
                     Log.debug(self, 'Creating directory /var/log/php/5.6/')
@@ -1260,7 +1260,7 @@ class EEStackController(CementBaseController):
                 EEService.restart_service(self, 'php7.0-fpm')
 
             #preconfiguration for php7.0
-            if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial') and set(EEVariables.ee_php7_0).issubset(set(apt_packages)):
+            if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'or EEVariables.ee_platform_codename == 'bionic') and set(EEVariables.ee_php7_0).issubset(set(apt_packages)):
                 # Create log directories
                 if not os.path.exists('/var/log/php/7.0/'):
                     Log.debug(self, 'Creating directory /var/log/php/7.0/')
@@ -2005,7 +2005,7 @@ class EEStackController(CementBaseController):
                             .format(EEVariables.ee_webroot))
 
                 #Fix pear install config for trusty
-                if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'):
+                if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'or EEVariables.ee_platform_codename == 'bionic'):
                     EEShellExec.cmd_exec(self, "pear config-set php_dir /usr/share/php")
                     EEShellExec.cmd_exec(self, "pear config-set doc_dir /lib/php/pear/docs")
                     EEShellExec.cmd_exec(self, "pear config-set cfg_dir /lib/php/pear/cfg")
@@ -2271,7 +2271,7 @@ class EEStackController(CementBaseController):
             if self.app.pargs.php:
                 Log.debug(self, "Setting apt_packages variable for PHP")
                 if not (EEAptGet.is_installed(self, 'php5-fpm') or EEAptGet.is_installed(self, 'php5.6-fpm')):
-                    if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'):
+                    if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'or EEVariables.ee_platform_codename == 'bionic'):
                         apt_packages = apt_packages + EEVariables.ee_php5_6 + EEVariables.ee_php_extra
                     else:
                         apt_packages = apt_packages + EEVariables.ee_php
@@ -2296,7 +2296,7 @@ class EEStackController(CementBaseController):
 
     #PHP 7.0 for Ubuntu
             if self.app.pargs.php7 and not EEVariables.ee_platform_distro == 'debian':
-                if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'):
+                if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'or EEVariables.ee_platform_codename == 'bionic'):
                     Log.debug(self, "Setting apt_packages variable for PHP 7.0")
                     if not EEAptGet.is_installed(self, 'php7.0-fpm') :
                         apt_packages = apt_packages + EEVariables.ee_php7_0 + EEVariables.ee_php_extra
@@ -2512,7 +2512,7 @@ class EEStackController(CementBaseController):
             self.app.pargs.web = True
             self.app.pargs.admin = True
             self.app.pargs.mail = True
-            if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'):
+            if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'or EEVariables.ee_platform_codename == 'bionic'):
                 self.app.pargs.php7 = True
 
         if self.app.pargs.web:
@@ -2554,7 +2554,7 @@ class EEStackController(CementBaseController):
                 Log.error(self,"Cannot Remove! Nginx Stable version not found.")
         if self.app.pargs.php:
             Log.debug(self, "Removing apt_packages variable of PHP")
-            if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'):
+            if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'or EEVariables.ee_platform_codename == 'bionic'):
                 apt_packages = apt_packages + EEVariables.ee_php5_6
                 if not EEAptGet.is_installed(self, 'php7.0-fpm'):
                     apt_packages = apt_packages + EEVariables.ee_php_extra
@@ -2572,7 +2572,7 @@ class EEStackController(CementBaseController):
                 Log.info(self,"PHP 7.0 not supported.")
 
         if self.app.pargs.php7:
-            if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'):
+            if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'or EEVariables.ee_platform_codename == 'bionic'):
                 Log.debug(self, "Removing apt_packages variable of PHP 7.0")
                 apt_packages = apt_packages + EEVariables.ee_php7_0
                 if not EEAptGet.is_installed(self, 'php5.6-fpm'):
@@ -2689,7 +2689,7 @@ class EEStackController(CementBaseController):
             self.app.pargs.web = True
             self.app.pargs.admin = True
             self.app.pargs.mail = True
-            if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'):
+            if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'or EEVariables.ee_platform_codename == 'bionic'):
                 self.app.pargs.php7 = True
 
         if self.app.pargs.web:
@@ -2731,7 +2731,7 @@ class EEStackController(CementBaseController):
                 Log.error(self,"Cannot Purge! Nginx Stable version not found.")
         if self.app.pargs.php:
             Log.debug(self, "Purge apt_packages variable PHP")
-            if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'):
+            if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'or EEVariables.ee_platform_codename == 'bionic'):
                 apt_packages = apt_packages + EEVariables.ee_php5_6
                 if not EEAptGet.is_installed(self, 'php7.0-fpm'):
                     apt_packages = apt_packages + EEVariables.ee_php_extra
@@ -2749,7 +2749,7 @@ class EEStackController(CementBaseController):
                 Log.info(self,"PHP 7.0 not supported.")
 
         if self.app.pargs.php7:
-            if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'):
+            if (EEVariables.ee_platform_codename == 'trusty' or EEVariables.ee_platform_codename == 'xenial'or EEVariables.ee_platform_codename == 'bionic'):
                 Log.debug(self, "Removing apt_packages variable of PHP 7.0")
                 apt_packages = apt_packages + EEVariables.ee_php7_0
                 if not EEAptGet.is_installed(self, 'php5.6-fpm'):
